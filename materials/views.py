@@ -29,6 +29,7 @@ def dashboard_page(request):
     # print(len(material_need_to_by))
     try:
         materials_need_to_by_vs_all = 100 - (100 / (int(all_materials.count() / len(material_need_to_by))))
+        # print(materials_need_to_by_vs_all)
     except Exception:
         materials_need_to_by_vs_all = 100
         pass
@@ -38,8 +39,21 @@ def dashboard_page(request):
                                                                                      created__month=today.month)
     deleted_materials_instance_in_this_mont_sum = deleted_materials_instance_in_this_mont.aggregate(Sum('count_deleted'))
 
+    #procent generate for count of material
+    procentages_materials = {}
+    # print(all_materials)
+    for m in all_materials:
+        try:
+            m.procent = 100 / (int(m.count_full) / int(m.count))
+            print(m)
+        except Exception:
+            m.procent = 100
+            pass
+    print(procentages_materials)
+
     # generate main context
     context = {
+        'materials': all_materials,
         'materials_count': all_materials.count(),
         'materials_need_to_by': len(material_need_to_by),
         'materials_need_to_by_vs_all': int(materials_need_to_by_vs_all),

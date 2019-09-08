@@ -120,7 +120,7 @@ class Material(models.Model):
     #     return self.count
 
     def __str__(self):
-        return f'Материал: {self.name} {self.pk}'
+        return f'Материал: {self.name}'
 
     class Meta:
         verbose_name = 'материал'
