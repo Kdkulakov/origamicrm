@@ -1,9 +1,52 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from django.urls import reverse_lazy
-
-from .models import Material, MaterialInstance
+from django.db.models import Sum
+from .models import Material, MaterialInstance, MaterialInstanceHistory
 from .forms import MaterialrModelForm, MaterialModelFormCount, MaterialInstanceForm
+
+import datetime
+
+today = datetime.datetime.today()
+
+def dashboard_page(request):
+    all_materials = Material.objects.all()
+
+    # collect and calculate how many materials need to refill
+
+    material_need_to_by = []
+
+    for material in all_materials:
+        current_count = material.count
+        max_count = material.count_full
+
+        procentage = (int(current_count) / int(max_count) ) * 100
+        # print(procentage)
+
+        if procentage < 30:
+            material_need_to_by.append(material.pk)
+
+    # print(len(material_need_to_by))
+    try:
+        materials_need_to_by_vs_all = 100 - (100 / (int(all_materials.count() / len(material_need_to_by))))
+    except Exception:
+        materials_need_to_by_vs_all = 100
+        pass
+
+    # count of deleted materials instances in this month
+    deleted_materials_instance_in_this_mont = MaterialInstanceHistory.objects.filter(created__year=today.year,
+                                                                                     created__month=today.month)
+    deleted_materials_instance_in_this_mont_sum = deleted_materials_instance_in_this_mont.aggregate(Sum('count_deleted'))
+
+    # generate main context
+    context = {
+        'materials_count': all_materials.count(),
+        'materials_need_to_by': len(material_need_to_by),
+        'materials_need_to_by_vs_all': int(materials_need_to_by_vs_all),
+        'deleted_materials_instance_in_this_mont': int(deleted_materials_instance_in_this_mont_sum['count_deleted__sum']),
+
+    }
+    return render(request, 'materials/dashboard.html', context)
 
 
 class MaterialCreate(CreateView):
@@ -131,5 +174,11 @@ class MaterialInstanceDel(CreateView):
         # change material count filed value
         material.count = int(material_instance_objects_count) - int(post_instance_count)
         material.save()
+
+        # add record deletation of instances
+        material_instance_history = MaterialInstanceHistory.objects.create(material=material, count_deleted=int(post_instance_count))
+        material_instance_history.save()
+
+        print(f'Deleted {post_instance_count} in material {material}')
 
         return HttpResponseRedirect(self.success_url)

@@ -150,3 +150,32 @@ class MaterialInstance(models.Model):
     class Meta:
         verbose_name = 'Экземляр материала'
         verbose_name_plural = 'Экземляры материала'
+
+
+class MaterialInstanceHistory(models.Model):
+    material = models.ForeignKey(
+        Material,
+        on_delete=models.CASCADE,
+        verbose_name='Название материала'
+    )
+
+    count_deleted = models.IntegerField(
+        verbose_name='количество списанных'
+    )
+
+    updated = models.DateTimeField(
+        auto_now=True,
+        verbose_name='updated'
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='created'
+    )
+
+    def __str__(self):
+        return self.material.name
+
+    class Meta:
+        verbose_name = 'Запись удаления'
+        verbose_name_plural = 'Записи удаления'

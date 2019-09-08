@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Material, MaterialCategory, MaterialUnits, MaterialInstance
+from .models import Material, MaterialCategory, MaterialUnits, MaterialInstance, MaterialInstanceHistory
 
 
 @admin.register(Material)
@@ -24,6 +24,24 @@ class MaterialAdmin(admin.ModelAdmin):
 
 admin.site.register(MaterialCategory)
 admin.site.register(MaterialUnits)
+
+
+@admin.register(MaterialInstanceHistory)
+class MaterialInstanceHistoryAdmin(admin.ModelAdmin):
+    list_display = [
+        'material', 'count_deleted', 'updated', 'created'
+    ]
+    readonly_fields = ['material', 'count_deleted']
+
+    list_filter = [
+        'material',
+        'created',
+        'updated'
+    ]
+
+    search_fields = [
+        'material',
+    ]
 
 
 @admin.register(MaterialInstance)

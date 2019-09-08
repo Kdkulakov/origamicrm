@@ -1,0 +1,95 @@
+{% extends 'master.html' %}
+{% load static %}
+
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{% static 'material/style.css' %}">
+
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="content-wrapper" style="min-height: 986px;">
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Control panel</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+<div class="content">
+<div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>{{materials_count}}</h3>
+
+              <p>Материалов</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+<!--            <a href="/materials/" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>{{materials_need_to_by_vs_all}}<sup style="font-size: 20px">%</sup></h3>
+
+              <p>Обеспеченность материалами</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+<!--            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>{{deleted_materials_instance_in_this_mont}}</h3>
+
+              <p>Израсходованно</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+<!--            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3>{{materials_need_to_by}}</h3>
+
+              <p>Требуют пополнения</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-pie-graph"></i>
+            </div>
+<!--            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+
+
+</div>
+</div>
+{% endblock %}

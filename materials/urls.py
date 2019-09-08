@@ -1,6 +1,6 @@
 from django.urls import path
 from materials.views import MaterialCreate, MaterialList, MaterialUpdate, MaterialUpdateCount, MaterialInstanceAdd, \
-    MaterialInstanceDel
+    MaterialInstanceDel, dashboard_page
 
 app_name = 'materials'
 
@@ -12,5 +12,6 @@ urlpatterns = [
     path('updatecount/<int:pk>/', MaterialUpdateCount.as_view(), name='updatecount'),
     path('instance_del/', MaterialInstanceDel.as_view(), name='instance_del'),
     # path('<slug:slug>/', ProductDetail.as_view(), name='detail'),
-    path('', MaterialList.as_view(), name='index'),
+    path('materials_list/', MaterialList.as_view(), name='materials_list'),
+    path('', dashboard_page, name='index'),
 ]
