@@ -1,0 +1,12 @@
+
+{% for i in material %}
+ <tr>
+   <td>{{i.pk}}</td>
+     <td><a href="{% url 'materials:update' pk=i.pk %}">{{i.name}}</a></td>
+   <td>{{i.category}}</td>
+   <td>{{i.short_desc}}</td>
+   <td>{{i.count}}/{{i.count_full}}&nbsp;{{i.units}}</td>
+   <td><span class="label {% if need == True %}label-success{% elif need == False %}label-danger{% endif %}">
+       {% if need == True %}ОК{% elif need == False %}ЗАКУПИТЬ{% endif %}</span></td>
+ </tr>
+{% endfor %}

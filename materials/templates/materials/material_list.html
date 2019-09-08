@@ -1,0 +1,107 @@
+{% extends 'master.html' %}
+{% load static %}
+
+
+{% block page_title %}
+Материалы
+{% endblock %}
+
+{% block page_styles %}
+<!--<link rel="stylesheet" href="{% static 'offer/style.css' %}">-->
+
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="content-wrapper" style="min-height: 986px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Материалы
+            <small>Список досутпных материалов</small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="callout callout-info">
+                <h4>Tip!</h4>
+
+                <p>Add the sidebar-collapse class to the body tag to get this layout. You should combine this option
+                    with a
+                    fixed layout if you have a long sidebar. Doing that will prevent your page content from getting
+                    stretched
+                    vertically. </p>
+            </div>
+            <!-- Default box -->
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Таблица материаллов</h3>
+
+                        <div class="box-tools">
+                            <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+                                <input type="text" name="table_search" class="form-control pull-right"
+                                       placeholder="Поиск">
+
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Категория</th>
+                                <th>Описание</th>
+                                <th>Количество</th>
+                                <th>Закончились</th>
+                            </tr>
+                            {% include 'materials/components/material.html' with material=instance %}
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+                <div class="box-tools">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}"> &laquo;</a></li>
+                        {% else %}
+                        <li><p href="" class="optionPagination "><span></span></p></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                        {% if page_obj.number == i %}
+                        <li><a class="optionPagination active"><span>{{ i }} <span class="sr-only optionPagination ">(current)</span></span>
+                        </a></li>
+                        {% else %}
+                        <li><a href="?page={{ i }}" class="optionPagination optNumPage">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}" class="optionPagination optPNB">
+                            &raquo; </a></li>
+                        {% else %}
+                        <li><p class="optionPagination "><span></span></p></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+
+{% endblock %}
