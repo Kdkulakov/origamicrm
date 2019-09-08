@@ -25,18 +25,18 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu tree" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-<!--        <li class="treeview">-->
-<!--          <a href="#">-->
-<!--            <i class="fa fa-dashboard"></i> <span>Dashboard</span>-->
-<!--            <span class="pull-right-container">-->
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            <span class="pull-right-container">
 <!--              <i class="fa fa-angle-left pull-right"></i>-->
-<!--            </span>-->
-<!--          </a>-->
+            </span>
+          </a>
 <!--          <ul class="treeview-menu">-->
 <!--            <li><a href="../../index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>-->
 <!--            <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>-->
 <!--          </ul>-->
-<!--        </li>-->
+        </li>
 <!--        <li class="treeview active menu-open">-->
 <!--          <a href="#">-->
 <!--            <i class="fa fa-files-o"></i>-->
@@ -53,7 +53,18 @@
 <!--            </li>-->
 <!--          </ul>-->
 <!--        </li>-->
-        <li><a href="/instance_add/"><i class="fa fa-plus"></i> <span>Приход</span></a></li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Операции</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/instance_add/"><i class="fa fa-plus"></i> Приход</a></li>
+            <li><a href="/instance_del/"><i class="fa fa-minus"></i> Расход</a></li>
+          </ul>
+        </li>
         <li><a href="/create/"><i class="fa fa-plus-square"></i> <span>Добавить материал</span></a></li>
         <li><a href="{% url 'materials:index' %}"><i class="fa fa-table"></i> <span>Список материалов</span></a></li>
 

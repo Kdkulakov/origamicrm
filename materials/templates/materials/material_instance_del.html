@@ -1,0 +1,64 @@
+{% extends 'master.html' %}
+{% load static %}
+
+
+{% block page_title %}
+Расход материала
+{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{% static 'material/style.css' %}">
+
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="content-wrapper" style="min-height: 986px;">
+<div class="col-md-6">
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Укажите количество изасходованного материала</h3>
+    </div>
+    <form role="form" method="POST" enctype="multipart/form-data">
+        <div class="box-body">
+            {% csrf_token %}
+
+            {% for err in form.not_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                <span>{{ err}}</span>
+            </div>
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+            <div class="form-group form">
+                <div class="col-xs-10">
+                    <p class="" for="{{ field.name }}">{{ field.label }}</p>
+                    {{ field }}
+
+                    {% for err in field.errors %}
+                        <small class="form-text">{{ err }}</small>
+                    {% endfor %}
+
+                </div>
+                {% endfor %}
+                <div class="col-xs-2">
+                    <p>Количество</p>
+                    <input type="number" name="instance_count" class="form-control" maxlength="50" id="instance_count">
+                </div>
+            </div>
+        </div>
+
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary pull-right">Сохранить</button>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+</div>
+
+
+</div>
+{% endblock %}

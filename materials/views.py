@@ -17,6 +17,7 @@ class MaterialList(ListView):
     model = Material
     template_name = 'materials/material_list.html'
     context_object_name = 'instance'
+    # paginate_by = 3   # нужно разобраться с ошибкой ZeroDivisionError: division by zero
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,11 +25,11 @@ class MaterialList(ListView):
         for material in context['object_list']:
             material_count_current = material.count
             material_count_max = material.count_full
-            print(material_count_current)
-            print(material_count_max)
+            print(f"{material.name} instance количество = " + str(material_count_current))
+            print(f"{material.name} instance максимальное количество = " + str(material_count_max))
 
             count_procentage = (material_count_current / material_count_max) * 100
-            print(count_procentage)
+            print(f"{material.name} instance процент = " + str(int(count_procentage)) + " %")
             if 30 > count_procentage:
 
                 print('count procentage less then meterial_count ' + str(material_count_current))
@@ -72,13 +73,13 @@ class MaterialInstanceAdd(CreateView):
     """
     model = MaterialInstance
     form_class = MaterialInstanceForm
-    template_name = 'materials/material_instance_add_create.html'
+    template_name = 'materials/material_instance_add.html'
     success_url = reverse_lazy('materials:index')
 
     def post(self, request, *args, **kwargs):
         post_instance_count = self.request.POST['instance_count']
         post_material = self.request.POST['material']
-        print("Material " + post_material + " add " + post_instance_count)
+        print("Material instance " + post_material + " add " + post_instance_count)
 
         material = Material.objects.get(pk=post_material)
 
@@ -101,23 +102,34 @@ class MaterialInstanceDel(CreateView):
     """
     model = MaterialInstance
     form_class = MaterialInstanceForm
-    template_name = 'materials/material_instance_add_create.html'
+    template_name = 'materials/material_instance_del.html'
     success_url = reverse_lazy('materials:index')
 
+    # take post request
     def post(self, request, *args, **kwargs):
         post_instance_count = self.request.POST['instance_count']
         post_material = self.request.POST['material']
-        print("Material " + post_material + " add " + post_instance_count)
+        print("Material instance " + post_material + " DEL " + post_instance_count)
 
         material = Material.objects.get(pk=post_material)
-        material_instance_count = MaterialInstance.objects.filter(material=material).values('pk')
-        print(list(material_instance_count))
+        print(material)
 
-        for x in list(material_instance_count):
-            material_instance_to_del = MaterialInstance.objects.filter(material=material, pk=x['pk']).delete()
-            print(material_instance_to_del)
+        # get all material instance objects
+        material_instance_objects = MaterialInstance.objects.filter(material=material)
+        material_instance_objects_count = MaterialInstance.objects.filter(material=material).count() # get count objects
+        # print(material_instance_objects_count)
 
-        material.count = material_instance_count - post_instance_count
+        # get id all objects
+        all_material_instance_id = material_instance_objects.values_list('pk', flat=True).order_by('pk')
+        print(all_material_instance_id)
+
+        # del all count objects
+        for x in list(all_material_instance_id)[:int(post_instance_count)]:
+            material_instance_to_del = MaterialInstance.objects.get(pk=x).delete()
+            print(f"Deleted instance {material_instance_to_del}. Material - {material}")
+
+        # change material count filed value
+        material.count = int(material_instance_objects_count) - int(post_instance_count)
         material.save()
 
         return HttpResponseRedirect(self.success_url)
