@@ -94,7 +94,7 @@ class Material(models.Model):
 
     count_full = models.PositiveIntegerField(
         verbose_name='минимальное количество',
-        default=0
+        default=100
     )
 
     units = models.ForeignKey(

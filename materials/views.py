@@ -2,15 +2,17 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Sum
-from .models import Material, MaterialInstance, MaterialInstanceHistory
+from .models import Material, MaterialInstance, MaterialInstanceHistory, MaterialCategory
 from .forms import MaterialrModelForm, MaterialModelFormCount, MaterialInstanceForm
 
 import datetime
 
 today = datetime.datetime.today()
 
+
 def dashboard_page(request):
     all_materials = Material.objects.all()
+    categories = MaterialCategory.objects.all()
 
     # collect and calculate how many materials need to refill
 
@@ -19,8 +21,12 @@ def dashboard_page(request):
     for material in all_materials:
         current_count = material.count
         max_count = material.count_full
+        try:
+            procentage = (int(current_count) / int(max_count) ) * 100
+        except Exception:
+            procentage = 0
+            pass
 
-        procentage = (int(current_count) / int(max_count) ) * 100
         # print(procentage)
 
         if procentage < 30:
@@ -39,21 +45,24 @@ def dashboard_page(request):
                                                                                      created__month=today.month)
     deleted_materials_instance_in_this_mont_sum = deleted_materials_instance_in_this_mont.aggregate(Sum('count_deleted'))
 
-    #procent generate for count of material
-    procentages_materials = {}
-    # print(all_materials)
+    # procent generate for count of material
     for m in all_materials:
         try:
             m.procent = 100 / (int(m.count_full) / int(m.count))
-            print(m)
+            if m.procent <= 30:
+                m.colorbar = 'progress-bar-red'
+            elif m.procent >= 31:
+                m.colorbar = 'progress-bar-green'
         except Exception:
-            m.procent = 100
+            m.procent = 0
             pass
-    print(procentages_materials)
+
+    # add field - change color bar
 
     # generate main context
     context = {
         'materials': all_materials,
+        'categories': categories,
         'materials_count': all_materials.count(),
         'materials_need_to_by': len(material_need_to_by),
         'materials_need_to_by_vs_all': int(materials_need_to_by_vs_all),

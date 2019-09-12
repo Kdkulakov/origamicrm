@@ -91,63 +91,46 @@ Dashboard
     <div class="col-md-12">
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">Tab 1</a></li>
-              <li><a href="#tab_2" data-toggle="tab">Tab 2</a></li>
-              <li><a href="#tab_3" data-toggle="tab">Tab 3</a></li>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  Dropdown <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                  <li role="presentation" class="divider"></li>
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-                </ul>
-              </li>
-              <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" id="tab_1">
-                <b>Обеспеченность материалами:</b>
 
-            <div class="box-body text-center">
+            <ul class="nav nav-tabs">
+              {% for category in categories %}
+                <li class="{% if forloop.first %}active{%endif%}"><a href="#tab_{{category.pk}}" data-toggle="tab">{{category.name}}</a></li>
+              {% endfor %}
+
+            </ul>
+
+            <div class="tab-content">
+              {% for category in categories %}
+              <div class="tab-pane {% if forloop.first %}active{%endif%}" id="tab_{{category.pk}}">
+
+                <b>Обеспеченность материалами:</b>
+                <div class="box-body text-center bar-flex">
+
                 {% for material in materials %}
-                <span>{{material.name}}</span>
-                {{material.procent}}
-                  <div class="progress vertical">
-                    <span>{{material.count_full}}</span>
-                    <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="{{material.procent}}" aria-valuemin="0" aria-valuemax="{{material.count_full}}" style="height: {{material.procent|floatformat}}%">
-                      <span class="sr-only">10% </span>
+                    {% if material.category.pk == category.pk %}
+                  <div class="main-bar">
+
+
+                      <div class="progress vertical">
+
+                        <span>{{material.count_full}}</span>
+                        <div class="progress-bar {{material.colorbar}}" role="progressbar" aria-valuenow="{{material.procent}}" aria-valuemin="0" aria-valuemax="{{material.count_full}}" style="height: {{material.procent|floatformat}}%">
+                          <span class="sr-only"> </span>
+                          {{material.count}}
+                        </div>
+                      </div>
+                    <div class="bar-name" style="width: 100px;">{{material.name}}</div>
                     </div>
-                  </div>
+                  {% endif %}
                 {% endfor %}
+
+
+                </div>
+
+              </div>
+            {% endfor %}
             </div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_2">
-                The European languages are members of the same family. Their separate existence is a myth.
-                For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
-                in their grammar, their pronunciation and their most common words. Everyone realizes why a
-                new common language would be desirable: one could refuse to pay expensive translators. To
-                achieve this, it would be necessary to have uniform grammar, pronunciation and more common
-                words. If several languages coalesce, the grammar of the resulting language is more simple
-                and regular than that of the individual languages.
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_3">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                like Aldus PageMaker including versions of Lorem Ipsum.
-              </div>
-              <!-- /.tab-pane -->
-            </div>
+
             <!-- /.tab-content -->
           </div>
           <!-- nav-tabs-custom -->
